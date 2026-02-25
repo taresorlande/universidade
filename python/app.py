@@ -4,75 +4,86 @@ from modules.aluno import Aluno
 import sys
 
 from PySide6.QtWidgets import (
-    QApplication, 
+    QApplication,
     QWidget,
     QVBoxLayout,
     QLabel,
     QLineEdit,
-    QPushButton
+    QPushButton,
+    QMessageBox
 )
 
-def cadastro():
-    aluno = Aluno(
-        campo_nome.text(),
-        campo_email.text(),
-        campo_cpf.text(),
-        campo_telefone.text(),
-        campo_endereco.text(),
-    )
+class TelaCadastro:
+    def __init__(self):
+        self.app = QApplication(sys.argv)
+        self.janela = QWidget()
+        self.layout = QVBoxLayout()
+        self.banco = MySQL()
 
-    banco = MySQL()
-    banco.connect()
+        self.campos = {}
 
-    aluno.cadastrar(banco)
+        self.configurar_janela()
+        self.criar_componentes()
 
-    banco.disconnect()
 
-app = QApplication(sys.argv)
+    def configurar_janela(self):
+        self.janela.setWindowTitle("Cadastro Aluno")
+        self.janela.resize(1200, 600)
+        self.janela.setLayout(self.layout)
 
-janela = QWidget()
-janela.setWindowTitle("Cadastro Aluno")
-janela.resize(1200, 600)
 
-layout = QVBoxLayout()
+    def criar_componentes(self):
+        estrutura = {
+            "nome": "Digite seu nome:",
+            "email": "Digite seu email:",
+            "cpf": "Digite seu cpf:",
+            "telefone": "Digite seu telefone:",
+            "endereco": "Digite seu endereço:"
+        }
 
-# Componentes
-label_nome = QLabel("Digite seu nome: ")
-campo_nome = QLineEdit()
+        for chave, texto in estrutura.items():
+            label = QLabel(texto)
+            campo = QLineEdit()
 
-label_email = QLabel("Digite seu email: ")
-campo_email = QLineEdit()
+            self.layout.addWidget(label)
+            self.layout.addWidget(campo)
 
-label_cpf = QLabel("Digite seu cpf: ")
-campo_cpf = QLineEdit()
+            self.campos[chave] = campo
 
-label_telefone = QLabel("Digite seu telefone: ")
-campo_telefone = QLineEdit()
+        self.botao_cadastro = QPushButton("Cadastrar")
+        self.layout.addWidget(self.botao_cadastro)
 
-label_endereco = QLabel("Digite seu endereço: ")
-campo_endereco = QLineEdit()
+        self.botao_cadastro.clicked.connect(self.cadastrar)
 
-botao = QPushButton("Cadastrar")
 
-# Adicionar componentes à janela
-layout.addWidget(label_nome)
-layout.addWidget(campo_nome)
+    def cadastrar(self):
+        aluno = Aluno(
+            self.campos['nome'].text(),
+            self.campos['email'].text(),
+            self.campos['cpf'].text(),
+            self.campos['telefone'].text(),
+            self.campos['endereco'].text()
+        )
 
-layout.addWidget(label_email)
-layout.addWidget(campo_email)
+        self.banco.connect()
 
-layout.addWidget(label_cpf)
-layout.addWidget(campo_cpf)
+        try:
+            aluno.cadastrar(self.banco)
+            QMessageBox.information(self.janela, "Sucesso", "Aluno cadastrado!")
+            self.limpar_campos()
+        except Exception as e:
+            QMessageBox.critical(self.janela, "Erro", f"Erro ao cadastrar: {str(e)}")
+        finally:
+            self.banco.disconnect()
 
-layout.addWidget(label_telefone)
-layout.addWidget(campo_telefone)
 
-layout.addWidget(label_endereco)
-layout.addWidget(campo_endereco)
+    def limpar_campos(self):
+        for campo in self.campos.values():
+            campo.clear()
 
-layout.addWidget(botao)
-janela.setLayout(layout)
-botao.clicked.connect(cadastro)
 
-janela.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    tela = TelaCadastro()
+    tela.janela.show()
+
+    sys.exit(tela.app.exec())
