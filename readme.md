@@ -32,6 +32,42 @@ classDiagram
     }
 ```
 
+## Diagrama de Sequência - **Cadastro**
+```mermaid
+sequenceDiagram 
+    participant UI as TelaCadastro 
+    participant Entidade as Aluno 
+    participant DB as MySQL 
+    participant Banco as MySQL Server 
+
+    UI ->> Entidade: cria Aluno(...) 
+    UI ->> DB: connect() 
+    UI ->> Entidade: cadastrar(DB) 
+    Entidade ->> DB: execute_query(INSERT) 
+    DB ->> Banco: Envia SQL 
+    Banco -->> DB: Confirmação 
+    DB -->> Entidade: lastrowid 
+    UI ->> DB: disconnect()
+```
+## Diagrama de Sequência - **Listagem**
+```mermaid
+sequenceDiagram
+    participant UI as TelaListagem
+    participant Entidade as Aluno
+    participant DB as MySQL
+    participant Banco as MySQL Server
+
+    UI ->> DB: connect()
+    UI ->> Entidade: listar(DB)
+    Entidade ->> DB: execute_query(SELECT)
+    DB ->> Banco: Envia SQL (SELECT)
+    Banco -->> DB: Retorna registros
+    DB -->> Entidade: lista de alunos
+    Entidade -->> UI: lista de alunos
+    UI ->> UI: preencher QTableWidget
+    UI ->> DB: disconnect()
+```
+
 # Funções MySQL
 
 - CREATE - Cria tabelas dentro da base de dados.
@@ -73,3 +109,26 @@ classDiagram
 - **Git Lens**: Interface gráfica pra o versionamento .git integrada ao VSCode.
 
 - **MySQL**: SGBD (Sistema Gerenciador de Banco de Dados). Permite conectar o usuário como servidor MySQL, possibilitando criar bases de dados, tabelas, incluir e modificar atributos e registros.
+
+## Build
+
+**Dependências:**
+- ~~pip install pyinstaller~~
+```
+pip install -r requirements.txt
+```
+
+**Congelar Dependências:**
+```
+pip freeze > requirements.txt
+```
+
+**Diretório Raiz do Projeto:** Pasta Python
+```
+cd python
+```
+```
+pyinstaller --onefile --windowed app.py
+```
+
+**O executável estará em:** dist/app.exe
