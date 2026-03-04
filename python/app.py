@@ -41,12 +41,10 @@ class App:
 
     def criar_componentes(self):
 
-        # 🔹 Título
         self.titulo = QLabel("SISTEMA UNIVERSIDADE")
         self.titulo.setObjectName("titulo")
         self.titulo.setAlignment(Qt.AlignCenter)
 
-        # 🔹 Subtítulo
         self.subtitulo = QLabel("Menu Principal")
         self.subtitulo.setObjectName("subtitulo")
         self.subtitulo.setAlignment(Qt.AlignCenter)
@@ -56,7 +54,6 @@ class App:
         self.layout.addWidget(self.subtitulo)
         self.layout.addSpacing(30)
 
-        # 🔹 Botões
         self.botao_listar = QPushButton("Listar Alunos")
         self.botao_listar.setObjectName("botaoPrimario")
         self.botao_listar.clicked.connect(self.abrir_listagem)

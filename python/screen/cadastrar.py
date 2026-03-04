@@ -40,7 +40,6 @@ class Cadastrar:
 
     def criar_componentes(self):
 
-        # 🔹 Título
         titulo = QLabel("CADASTRO DE ALUNO")
         titulo.setAlignment(Qt.AlignCenter)
         titulo.setObjectName("titulo")
@@ -64,7 +63,6 @@ class Cadastrar:
 
             self.campos[chave] = campo
 
-        # 🔹 Barra inferior
         barra_botoes = QHBoxLayout()
 
         botao_cadastro = QPushButton("Cadastrar")

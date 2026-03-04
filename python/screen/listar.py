@@ -39,14 +39,12 @@ class Listar:
 
     def criar_componentes(self):
 
-        # 🔹 Título
         titulo = QLabel("LISTAGEM DE ALUNOS")
         titulo.setAlignment(Qt.AlignCenter)
         titulo.setObjectName("titulo")
 
         self.layout.addWidget(titulo)
 
-        # 🔹 Tabela
         self.tabela = QTableWidget()
         self.tabela.setColumnCount(6)
         self.tabela.setHorizontalHeaderLabels(
@@ -61,7 +59,6 @@ class Listar:
 
         self.layout.addWidget(self.tabela)
 
-        # 🔹 Barra inferior
         barra_botoes = QHBoxLayout()
 
         botao_atualizar = QPushButton("Atualizar")
