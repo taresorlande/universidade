@@ -95,6 +95,7 @@ class Listar:
                 background-color: white;
                 border: 1px solid #dcdcdc;
                 gridline-color: #eeeeee;
+                color: #000000;
             }
 
             QHeaderView::section {
